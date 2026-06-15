@@ -20,8 +20,6 @@ const projects = defineCollection({
     date: z.coerce.date(),
     draft: z.boolean().optional(),
     tags: z.array(z.string()).optional(),
-    demoURL: z.string().optional(),
-    repoURL: z.string().optional(),
   }),
 });
 
