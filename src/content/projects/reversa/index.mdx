@@ -1,0 +1,34 @@
+---
+title: "Reversa"
+description: "Android-приложение для тренировки памяти"
+date: "05/14/2026"
+tags: ["Android"]
+---
+
+import Link from "@components/Link.astro";
+
+Google Play: <Link href="https://play.google.com/store/apps/details?id=com.duckpsycho.reversa" external>{"https://play.google.com/store/apps/details?id=com.duckpsycho.reversa"}</Link>
+
+Небольшое приложение для тренировки кратковременной памяти с возможностью отслеживать результаты.
+Идея простая -- нужно не просто запоминать числа, а мысленно переворачивать в них порядок цифр и только потом вводить результат.
+
+Изначально создавал для себя, пока разбирался с Android, но в итоге захотел пройти весь путь:
+от регистрации в Google Play Console до тестирования и публикации.
+
+Наверное, даже напишу позже пост про публикацию первого приложения в Google Play -- опишу генерацию политики конфиденциальности, 
+заполнение страницы и, самое главное, тестирование в течение 14 дней 12 тестировщиками
+(да, такие правила сейчас в Google Play, но не для всех).
+
+## 📷 Скриншоты
+
+import ImageCarousel from "@components/ImageCarousel.astro";
+
+<ImageCarousel
+  images={[
+    { src: "/images/reversa/screenshot1.webp", alt: "Reversa: главный экран и правила" },
+    { src: "/images/reversa/screenshot2.webp", alt: "Reversa: процесс ввода числа" },
+    { src: "/images/reversa/screenshot3.webp", alt: "Reversa: календарь с результатами и рекордами" },
+    { src: "/images/reversa/screenshot4.webp", alt: "Reversa: аналитика" },
+  ]}
+/>
+

@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/Container.astro";
+import ArrowCard from "@components/ArrowCard.astro";
+import BackToPrevious from "@components/BackToPrevious.astro";
+import { TAGS } from "@consts";
+
+export async function getStaticPaths() {
+  const [blog, projects] = await Promise.all([
+    getCollection("blog", ({ data }) => !data.draft),
+    getCollection("projects", ({ data }) => !data.draft),
+  ]);
+  const entries = [...blog, ...projects];
+
+  const tags = [...new Set(entries.flatMap((entry) => entry.data.tags || []))];
+
+  return tags.map((tag) => ({
+    params: { id: tag },
+    props: {
+      entries: entries.filter((entry) => entry.data.tags?.includes(tag)),
+    },
+  }));
+}
+
+const { id } = Astro.params;
+const { entries } = Astro.props;
+
+const sortedEntries = entries.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+);
+---
+
+<Layout title={`${TAGS.TITLE}: ${id}`} description={`Записи с тегом: ${id}`}>
+  <Container>
+    <div class="space-y-10" data-pagefind-ignore>
+      <BackToPrevious href="/tags"> Все теги </BackToPrevious>
+      <h1 class="animate font-semibold text-black dark:text-white">
+        Записи с тегом «{id}»
+      </h1>
+      <ul class="animate flex flex-col gap-4">
+        {sortedEntries.map((entry) => (
+          <li>
+            <ArrowCard entry={entry} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Container>
+</Layout>
