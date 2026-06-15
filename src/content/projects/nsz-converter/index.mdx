@@ -1,0 +1,31 @@
+---
+title: "NSZ Converter"
+description: "Android-приложение для распаковки NSZ-файлов в NSP"
+date: "05/21/2026"
+tags: ["Android", "Nintendo Switch"]
+---
+
+import Link from "@components/Link.astro";
+
+GitHub: <Link href="https://github.com/duck-psycho/nsz-converter" external>{"https://github.com/duck-psycho/nsz-converter"}</Link>
+
+Моя первая попытка погрузиться в мир Nintendo Switch, но без разработки под Horizon.
+Разбирался с NSZ и проверял <Link href="https://cursor.com/" external>Cursor</Link> с моделью Composer.
+Достаточно элегантное решение для пользователя получилось, еще и размер последней версии 1.23 МБ.
+
+NSZ Converter конвертирует файлы Nintendo Switch из сжатого формата NSZ в NSP без использования `prod.keys`.
+
+Приложение бесплатное и без рекламы, но его исходный код закрыт, потому что я не хочу, чтобы кто-либо паразитировал на нём или выложил в Google Play.
+
+Единственное разрешение, необходимое для работы, — это доступ к записи в выбранную директорию.
+Приложение не собирает никаких данных и не имеет доступа к сети.
+
+## Скриншоты
+
+import ImageCarousel from "@components/ImageCarousel.astro";
+
+<ImageCarousel
+  images={[
+    { src: "/images/nsz-converter/screenshot.jpg", alt: "NSZ Converter: главный экран" },
+  ]}
+/>
