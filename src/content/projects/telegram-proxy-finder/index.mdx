@@ -1,0 +1,27 @@
+---
+title: "Telegram Proxy Finder"
+description: "Android-приложение для поиска рабочих MTProto-прокси для Telegram"
+date: "06/15/2026"
+tags: ["Android", "Telegram"]
+---
+
+import Link from "@components/Link.astro";
+
+GitHub: <Link href="https://github.com/duck-psycho/telegram-proxy-finder" external>{"https://github.com/duck-psycho/telegram-proxy-finder"}</Link>
+
+Приложение с очень простой идеей и реализацией. Загружаются публичные списки прокси(из GitHub-репозиториев,
+которые регулярно обновляются), а потом каждый прокси проверяется через `tdlib` на доступность и пинг.
+
+Для работы нужна только сеть, приложение собирает списки с бесплатными прокси и выбирает именно те,
+которые работают на вашем устройстве и у вашего провайдера. Из-за этого в прокси может быть спонсорский канал, тут уж как повезет.
+Потом нажимаете "Connect" на любом из них, и все.
+
+## Скриншоты
+
+import ImageCarousel from "@components/ImageCarousel.astro";
+
+<ImageCarousel
+  images={[
+    { src: "/images/telegram-proxy-finder/screenshot.jpg", alt: "Telegram Proxy Finder: главный экран" },
+  ]}
+/>
