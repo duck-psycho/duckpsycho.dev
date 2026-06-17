@@ -37,11 +37,16 @@ const pageTitle = title ? `${SITE.TITLE} | ${title}` : SITE.TITLE;
 
     <script is:inline>
       function trackView() {
+        const payload = { path: window.location.pathname };
+        if (document.referrer) {
+          payload.referrer = document.referrer;
+        }
+
         fetch('/api/v1/views', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'same-origin',
-          body: JSON.stringify({ path: window.location.pathname }),
+          body: JSON.stringify(payload),
           keepalive: true,
         }).catch(() => {});
       }
