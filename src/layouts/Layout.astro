@@ -34,5 +34,20 @@ const pageTitle = title ? `${SITE.TITLE} | ${title}` : SITE.TITLE;
     </main>
     <Footer />
     <Pagefind />
+
+    <script is:inline>
+      function trackView() {
+        fetch('/api/v1/views', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ path: window.location.pathname }),
+          keepalive: true,
+        }).catch(() => {});
+      }
+
+      document.addEventListener('DOMContentLoaded', trackView);
+      document.addEventListener('astro:after-swap', trackView);
+    </script>
   </body>
 </html>
