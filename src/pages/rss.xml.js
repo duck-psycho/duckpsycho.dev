@@ -1,5 +1,6 @@
 import rss from "@astrojs/rss";
 import { SITE } from "@consts";
+import { contentUrl } from "@lib/utils";
 import { getCollection } from "astro:content";
 
 export async function GET(context) {
@@ -21,7 +22,7 @@ export async function GET(context) {
       title: item.data.title,
       description: item.data.description,
       pubDate: item.data.date,
-      link: `/${item.collection}/${item.id}/`,
+      link: contentUrl(item.collection, item.id),
     })),
   });
 }
