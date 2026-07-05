@@ -9,6 +9,10 @@ export function contentUrl(collection: string, id: string) {
   return `/${collection}/${id}/`;
 }
 
+export function tagUrl(tag: string) {
+  return `/tags/${tag}/`;
+}
+
 export function formatDate(date: Date) {
   return Intl.DateTimeFormat("ru-RU", {
     year: "numeric",
