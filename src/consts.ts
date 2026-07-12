@@ -1,4 +1,12 @@
-import type { Metadata, Site, Socials } from "@types";
+import type { Giscus, Metadata, Site, Socials } from "@types";
+
+export const GISCUS: Giscus = {
+  REPO: "duck-psycho/duckpsycho.dev",
+  REPO_ID: import.meta.env.PUBLIC_GISCUS_REPO_ID ?? "",
+  CATEGORY: "Comments",
+  CATEGORY_ID: import.meta.env.PUBLIC_GISCUS_CATEGORY_ID ?? "",
+  LANG: "ru",
+};
 
 export const SITE: Site = {
   TITLE: "duckpsycho",

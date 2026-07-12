@@ -6,6 +6,7 @@ import FormattedDate from "@components/FormattedDate.astro";
 import { readingTime, tagUrl } from "@lib/utils";
 import BackToPrevious from "@components/BackToPrevious.astro";
 import TableOfContents from "@components/TableOfContents.astro";
+import Comments from "@components/Comments.astro";
 
 export async function getStaticPaths() {
   const projects = (await getCollection("projects"))
@@ -61,6 +62,7 @@ const { Content, headings } = await render(project);
     {headings.length > 0 && <TableOfContents headings={headings} />}
     <article class="animate">
       <Content />
+      <Comments />
     </article>
   </Container>
 </Layout>

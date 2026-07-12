@@ -15,3 +15,11 @@ export type Socials = {
   NAME: string;
   HREF: string;
 }[];
+
+export type Giscus = {
+  REPO: string;
+  REPO_ID: string;
+  CATEGORY: string;
+  CATEGORY_ID: string;
+  LANG: string;
+};
