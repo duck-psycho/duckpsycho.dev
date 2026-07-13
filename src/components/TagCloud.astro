@@ -1,12 +1,14 @@
 ---
-import { getCollection } from "astro:content";
+import { getLocalizedEntries } from "@lib/content";
 import { tagUrl } from "@lib/utils";
+import { type Locale } from "@lib/i18n";
 
-const [blog, projects] = await Promise.all([
-  getCollection("blog", ({ data }) => !data.draft),
-  getCollection("projects", ({ data }) => !data.draft),
-]);
-const entries = [...blog, ...projects];
+type Props = {
+  lang?: Locale;
+};
+
+const { lang = "ru" } = Astro.props;
+const entries = await getLocalizedEntries(lang);
 const tags = [...new Set(entries.flatMap((entry) => entry.data.tags || []))].sort();
 ---
 
@@ -15,7 +17,7 @@ const tags = [...new Set(entries.flatMap((entry) => entry.data.tags || []))].sor
     <div class="flex flex-wrap gap-2">
       {tags.map((tag) => (
         <a
-          href={tagUrl(tag)}
+          href={tagUrl(tag, lang)}
           class="rounded-sm border border-black/15 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
         >
           {tag}

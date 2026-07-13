@@ -1,0 +1,37 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/Container.astro";
+import ArrowCard from "@components/ArrowCard.astro";
+import { getLocalizedProjects } from "@lib/content";
+import { type Locale } from "@lib/i18n";
+import { t } from "@i18n/ui";
+
+type Props = {
+  lang: Locale;
+};
+
+const { lang } = Astro.props;
+const ui = t(lang);
+const projects = await getLocalizedProjects(lang);
+---
+
+<Layout lang={lang} title={ui.projects.title} description={ui.projects.description}>
+  <Container>
+    <aside>
+      <div class="space-y-10">
+        <div class="animate font-semibold text-black dark:text-white">
+          {ui.projects.title}
+        </div>
+        <ul class="animate not-prose flex flex-col gap-4">
+          {
+            projects.map((project) => (
+              <li>
+                <ArrowCard entry={project} />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </aside>
+  </Container>
+</Layout>

@@ -1,0 +1,26 @@
+---
+import type { Locale } from "@lib/i18n";
+import { localizePath, stripLocalePrefix } from "@lib/i18n";
+import { t } from "@i18n/ui";
+
+type Props = {
+  lang: Locale;
+  alternates: { lang: Locale; href: string }[];
+};
+
+const { lang, alternates } = Astro.props;
+const ui = t(lang);
+const alternateLang: Locale = lang === "ru" ? "en" : "ru";
+const alternateLangLabel = ui.languageSwitcher[alternateLang];
+const alternateHref =
+  alternates.find((alternate) => alternate.lang === alternateLang)?.href ??
+  localizePath(stripLocalePrefix(Astro.url.pathname), alternateLang);
+---
+
+<a
+  href={alternateHref}
+  class="rounded-sm border border-black/15 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
+  aria-label={`${ui.languageSwitcher.label}: ${alternateLangLabel}`}
+>
+  {alternateLangLabel}
+</a>

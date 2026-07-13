@@ -1,10 +1,18 @@
 ---
 import Search from "astro-pagefind/components/Search";
+import { type Locale } from "@lib/i18n";
+import { t } from "@i18n/ui";
+
+type Props = {
+  lang: Locale;
+};
+
+const { lang } = Astro.props;
+const ui = t(lang);
 ---
 
 <aside data-pagefind-ignore>
   <div
-    transition:persist
     id="backdrop"
     class="bg-[rgba(0,0,0,0.5)] invisible fixed left-0 top-0 z-50 flex h-screen w-full justify-center p-6 backdrop-blur-xs"
   >
@@ -22,77 +30,91 @@ import Search from "astro-pagefind/components/Search";
         }}
       />
       <div class="mr-2 pb-1 pt-4 text-right text-xs dark:prose-invert">
-        Нажмите <span class="prose text-xs dark:prose-invert"
-          ><kbd class="">Esc</kbd></span
-        >, чтобы закрыть
+        {ui.search.closePrefix}{" "}
+        <span class="prose text-xs dark:prose-invert"><kbd class="">Esc</kbd></span>
+        {ui.search.closeSuffix}
       </div>
     </div>
   </div>
 </aside>
 
 <script is:inline>
-  const magnifyingGlass = document.getElementById("magnifying-glass");
-  const backdrop = document.getElementById("backdrop");
-
   function openPagefind() {
-    const searchDiv = document.getElementById("search");
-    const input = searchDiv?.querySelector("input");
-    if (!input) return;
-    setTimeout(() => {
-      input.focus();
-    }, 0);
+    const backdrop = document.getElementById("backdrop");
     backdrop?.classList.remove("invisible");
     backdrop?.classList.add("visible");
+
+    const input = document.getElementById("search")?.querySelector("input");
+    if (input) {
+      setTimeout(() => {
+        input.focus();
+      }, 0);
+    }
   }
 
   function closePagefind() {
-    const searchDiv = document.getElementById("search");
-    const input = searchDiv?.querySelector("input");
+    const backdrop = document.getElementById("backdrop");
+    const input = document.getElementById("search")?.querySelector("input");
     if (input) input.value = "";
     backdrop?.classList.remove("visible");
     backdrop?.classList.add("invisible");
   }
 
-  // open pagefind
-  magnifyingGlass?.addEventListener("click", () => {
-    openPagefind();
-  });
+  function initPagefind() {
+    const magnifyingGlass = document.getElementById("magnifying-glass");
+    const backdrop = document.getElementById("backdrop");
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "/") {
-      e.preventDefault();
-      openPagefind();
-    } else if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-      e.preventDefault();
-      openPagefind();
+    if (magnifyingGlass) {
+      magnifyingGlass.onclick = openPagefind;
     }
-  });
 
-  // close pagefind
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      closePagefind();
+    if (backdrop) {
+      backdrop.onclick = (event) => {
+        if (
+          event.target instanceof Element &&
+          !event.target.closest("#pagefind-container")
+        ) {
+          closePagefind();
+        }
+      };
     }
-  });
+  }
 
-  // close pagefind when searched result(link) clicked
-  document.addEventListener("click", (event) => {
-    if (event.target instanceof Element && event.target.classList.contains("pagefind-ui__result-link")) {
-      closePagefind();
-    }
-  });
+  let shortcutsBound = false;
 
-  backdrop?.addEventListener("click", (event) => {
-    if (!event.target.closest("#pagefind-container")) {
-      closePagefind();
-    }
-  });
+  function initPagefindShortcuts() {
+    if (shortcutsBound) return;
+    shortcutsBound = true;
 
-  // prevent form submission
-  const form = document.getElementById("form");
-  form?.addEventListener("submit", (event) => {
-    event.preventDefault();
-  });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "/") {
+        e.preventDefault();
+        openPagefind();
+      } else if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        openPagefind();
+      } else if (e.key === "Escape") {
+        closePagefind();
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (
+        event.target instanceof Element &&
+        event.target.classList.contains("pagefind-ui__result-link")
+      ) {
+        closePagefind();
+      }
+    });
+  }
+
+  function initPagefindControls() {
+    initPagefind();
+    initPagefindShortcuts();
+  }
+
+  document.addEventListener("DOMContentLoaded", initPagefindControls);
+  document.addEventListener("astro:after-swap", initPagefindControls);
 </script>
 
 <style is:global>

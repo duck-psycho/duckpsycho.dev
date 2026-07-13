@@ -1,13 +1,26 @@
 ---
 import Container from "@components/Container.astro";
 import Link from "@components/Link.astro";
+import LanguageSwitcher from "@components/LanguageSwitcher.astro";
 import { SITE } from "@consts";
+import { type Locale } from "@lib/i18n";
+import { localizePath } from "@lib/i18n";
+import { blogIndexUrl, projectsIndexUrl } from "@lib/utils";
+import { t } from "@i18n/ui";
+
+type Props = {
+  lang: Locale;
+  alternates: { lang: Locale; href: string }[];
+};
+
+const { lang, alternates } = Astro.props;
+const ui = t(lang);
 ---
 
-<header transition:persist>
+<header>
   <Container>
     <div class="flex flex-wrap justify-between gap-y-2">
-      <Link href="/" underline={false}>
+      <Link href={localizePath("/", lang)} underline={false}>
         <div class="font-semibold">
           {SITE.TITLE}
         </div>
@@ -16,7 +29,7 @@ import { SITE } from "@consts";
         <button
           id="magnifying-glass"
           type="button"
-          aria-label="Поиск"
+          aria-label={ui.nav.search}
           class="flex size-8 items-center justify-center rounded-sm border-black/15 hover:bg-black/5 focus-visible:bg-black/5 dark:border-white/20 dark:hover:bg-white/5 dark:focus-visible:bg-white/5"
         >
           <svg
@@ -35,11 +48,13 @@ import { SITE } from "@consts";
           </svg>
         </button>
         <span>{`/`}</span>
-        <Link href="/blog">блог</Link>
+        <Link href={blogIndexUrl(lang)}>{ui.nav.blog}</Link>
         <span>
           {`/`}
         </span>
-        <Link href="/projects">проекты</Link>
+        <Link href={projectsIndexUrl(lang)}>{ui.nav.projects}</Link>
+        <span>{`/`}</span>
+        <LanguageSwitcher lang={lang} alternates={alternates} />
       </nav>
     </div>
   </Container>

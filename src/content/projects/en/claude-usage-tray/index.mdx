@@ -1,0 +1,28 @@
+---
+title: "Claude Usage Tray"
+description: "Tray indicator for Claude Code usage limits"
+date: "07/11/2026"
+tags: ["Claude"]
+---
+
+import Link from "@components/Link.astro";
+
+GitHub: <Link href="https://github.com/duck-psycho/claude-usage-tray" external>{"https://github.com/duck-psycho/claude-usage-tray"}</Link>
+
+A small cross-platform app written in `Rust` that solves a simple but pressing problem for `Claude Code` users: there is no convenient way to track usage limits.
+The app shows the percentage of the current 5-hour session used right in the system tray icon, and on hover or click,
+it displays a detailed usage breakdown — both for the 5-hour window and the weekly limit (7 days).
+
+Technically, it works quite simply: instead of requiring separate authentication,
+the app reads the OAuth token that `Claude Code CLI` already stores locally in `~/.claude/.credentials.json`
+and calls the same usage API that the client itself uses.
+
+## Screenshots
+
+import ImageCarousel from "@components/ImageCarousel.astro";
+
+<ImageCarousel
+  images={[
+    { src: "/images/claude-usage-tray/screenshot.png", alt: "Claude Usage Tray: tray with tooltip" },
+  ]}
+/>

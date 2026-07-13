@@ -1,0 +1,39 @@
+---
+title: "Telegram Proxy Finder"
+description: "Android app for finding working MTProto proxies for Telegram"
+date: "06/15/2026"
+tags: ["Android", "Telegram"]
+---
+
+import Link from "@components/Link.astro";
+
+GitHub: <Link href="https://github.com/duck-psycho/telegram-proxy-finder" external>{"https://github.com/duck-psycho/telegram-proxy-finder"}</Link>
+
+An app with a very simple concept and implementation. It fetches public proxy lists (from regularly updated GitHub repositories)
+and checks each proxy's availability and ping via `tdlib`.
+
+The only permission it needs is network access. The app aggregates free proxy lists and highlights the ones that actually work on your specific device and ISP.
+Keep in mind that some proxies may include a sponsored channel — it's just the nature of free public lists.
+Once you find one that works, just hit "Connect" and you're good to go.
+
+### Update: July 5, 2026
+
+GitHub: https://github.com/duck-psycho/telegram-proxy-finder/releases/tag/v1.2
+
+Version 1.2 introduces the following changes:
+1. Telegram channel sources: proxies are now also fetched from Telegram channels via the Finder API (rather than directly from Telegram),
+complementing the existing GitHub lists.
+2. Automatic update checks via GitHub Releases.
+3. Faster source loading: proxy lists are now loaded in parallel instead of sequentially, allowing the verification process to start much sooner.
+4. Shorter network timeouts: HTTP connection and read timeouts have been reduced (to 5 and 10 seconds, respectively).
+This ensures that checking cached sources starts faster if you experience issues accessing githubusercontent.com
+
+## Screenshots
+
+import ImageCarousel from "@components/ImageCarousel.astro";
+
+<ImageCarousel
+  images={[
+    { src: "/images/telegram-proxy-finder/screenshot.jpg", alt: "Telegram Proxy Finder: main screen" },
+  ]}
+/>

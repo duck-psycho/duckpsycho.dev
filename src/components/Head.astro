@@ -2,6 +2,8 @@
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import { SITE } from "@consts";
+import { type Locale, ogLocale, LOCALES } from "@lib/i18n";
+import { localizePath } from "@lib/i18n";
 
 import "@fontsource/geist-sans/100.css";
 import "@fontsource/geist-sans/200.css";
@@ -26,14 +28,28 @@ interface Props {
   title: string;
   description: string;
   image?: string;
+  lang: Locale;
+  alternates: { lang: Locale; href: string }[];
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image } = Astro.props;
+const { title, description, image, lang, alternates } = Astro.props;
+const rssPath = localizePath("/rss.xml", lang);
+const alternateLocales = LOCALES.filter((locale) => locale !== lang).map(ogLocale);
 ---
 
 <meta charset="utf-8" />
+<script is:inline>
+  try {
+    const theme = localStorage.getItem("theme");
+    const dark =
+      theme === "dark" ||
+      (theme !== "light" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.classList.toggle("dark", dark);
+  } catch {}
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -43,11 +59,33 @@ const { title, description, image } = Astro.props;
 
 <link rel="canonical" href={canonicalURL} />
 
+{
+  alternates.map((alternate) => (
+    <link
+      rel="alternate"
+      hreflang={alternate.lang}
+      href={new URL(alternate.href, Astro.site).href}
+    />
+  ))
+}
+{
+  alternates.some((alternate) => alternate.lang === "ru") && (
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(
+        alternates.find((alternate) => alternate.lang === "ru")!.href,
+        Astro.site,
+      ).href}
+    />
+  )
+}
+
 <link
   rel="alternate"
   type="application/rss+xml"
   title={SITE.TITLE}
-  href={new URL("/rss.xml", Astro.site)}
+  href={rssPath}
 />
 
 <!-- Primary Meta Tags -->
@@ -60,6 +98,12 @@ const { title, description, image } = Astro.props;
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
+<meta property="og:locale" content={ogLocale(lang)} />
+{
+  alternateLocales.map((locale) => (
+    <meta property="og:locale:alternate" content={locale} />
+  ))
+}
 {image && <meta property="og:image" content={new URL(image, Astro.url)} />}
 
 <!-- Twitter -->
@@ -76,35 +120,41 @@ const { title, description, image } = Astro.props;
 <ClientRouter />
 
 <script is:inline>
-  function init() {
-    preloadTheme();
-    animate();
-    updateThemeButtons();
-    addCopyCodeButtons();
-
-    const backToPrev = document.getElementById("back-to-prev");
-    backToPrev?.addEventListener("click", () => window.history.back());
-
+  function initThemeButtons() {
     const lightThemeButton = document.getElementById("light-theme-button");
-    lightThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "light");
-      toggleTheme(false);
-      updateThemeButtons();
-    });
-
     const darkThemeButton = document.getElementById("dark-theme-button");
-    darkThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "dark");
-      toggleTheme(true);
-      updateThemeButtons();
-    });
-
     const systemThemeButton = document.getElementById("system-theme-button");
-    systemThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "system");
-      toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
-      updateThemeButtons();
-    });
+
+    if (lightThemeButton) {
+      lightThemeButton.onclick = () => {
+        localStorage.setItem("theme", "light");
+        toggleTheme(false);
+        updateThemeButtons();
+      };
+    }
+
+    if (darkThemeButton) {
+      darkThemeButton.onclick = () => {
+        localStorage.setItem("theme", "dark");
+        toggleTheme(true);
+        updateThemeButtons();
+      };
+    }
+
+    if (systemThemeButton) {
+      systemThemeButton.onclick = () => {
+        localStorage.setItem("theme", "system");
+        toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
+        updateThemeButtons();
+      };
+    }
+  }
+
+  let systemThemeListenerBound = false;
+
+  function bindSystemThemeListener() {
+    if (systemThemeListenerBound) return;
+    systemThemeListenerBound = true;
 
     window
       .matchMedia("(prefers-color-scheme: dark)")
@@ -113,7 +163,18 @@ const { title, description, image } = Astro.props;
           toggleTheme(event.matches);
         }
       });
+  }
 
+  function init() {
+    animate();
+    updateThemeButtons();
+    initThemeButtons();
+    addCopyCodeButtons();
+
+    const backToPrev = document.getElementById("back-to-prev");
+    if (backToPrev) {
+      backToPrev.onclick = () => window.history.back();
+    }
   }
 
   function updateThemeButtons() {
@@ -230,7 +291,13 @@ const { title, description, image } = Astro.props;
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => init());
-  document.addEventListener("astro:after-swap", () => init());
+  document.addEventListener("DOMContentLoaded", () => {
+    bindSystemThemeListener();
+    init();
+  });
+  document.addEventListener("astro:after-swap", () => {
+    preloadTheme();
+    init();
+  });
   preloadTheme();
 </script>

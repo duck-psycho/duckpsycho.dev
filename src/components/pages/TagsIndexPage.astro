@@ -1,0 +1,40 @@
+---
+import { tagUrl } from "@lib/utils";
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/Container.astro";
+import { getLocalizedEntries } from "@lib/content";
+import { type Locale } from "@lib/i18n";
+import { t } from "@i18n/ui";
+
+type Props = {
+  lang: Locale;
+};
+
+const { lang } = Astro.props;
+const ui = t(lang);
+const entries = await getLocalizedEntries(lang);
+const tags = [...new Set(entries.flatMap((entry) => entry.data.tags || []))].sort();
+---
+
+<Layout lang={lang} title={ui.tags.title} description={ui.tags.description}>
+  <Container>
+    <div class="space-y-10">
+      <h1 class="animate font-semibold">{ui.tags.allTags}</h1>
+      <div class="animate flex flex-wrap gap-2">
+        {
+          tags.map((tag) => (
+            <a
+              href={tagUrl(tag, lang)}
+              class="rounded-sm border border-black/15 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
+            >
+              {tag}{" "}
+              <span class="text-sm text-gray-600">
+                ({entries.filter((entry) => entry.data.tags?.includes(tag)).length})
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </Container>
+</Layout>

@@ -1,0 +1,44 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/Container.astro";
+import ArrowCard from "@components/ArrowCard.astro";
+import BackToPrevious from "@components/BackToPrevious.astro";
+import type { LocalizedEntry } from "@lib/content";
+import { type Locale } from "@lib/i18n";
+import { t } from "@i18n/ui";
+
+type Props = {
+  lang: Locale;
+  tag: string;
+  entries: LocalizedEntry[];
+};
+
+const { lang, tag, entries } = Astro.props;
+const ui = t(lang);
+
+const sortedEntries = entries.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+);
+---
+
+<Layout
+  lang={lang}
+  title={`${ui.tags.title}: ${tag}`}
+  description={ui.tags.pageDescription(tag)}
+>
+  <Container>
+    <div class="space-y-10">
+      <BackToPrevious>{ui.common.back}</BackToPrevious>
+      <h1 class="animate font-semibold text-black dark:text-white">
+        {ui.tags.entriesWithTag(tag)}
+      </h1>
+      <ul class="animate flex flex-col gap-4">
+        {sortedEntries.map((entry) => (
+          <li>
+            <ArrowCard entry={entry} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Container>
+</Layout>

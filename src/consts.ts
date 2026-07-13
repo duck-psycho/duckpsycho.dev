@@ -1,39 +1,17 @@
-import type { Giscus, Metadata, Site, Socials } from "@types";
+import type { Giscus, Site, Socials } from "@types";
 
 export const GISCUS: Giscus = {
   REPO: "duck-psycho/duckpsycho.dev",
   REPO_ID: import.meta.env.PUBLIC_GISCUS_REPO_ID ?? "",
   CATEGORY: "Comments",
   CATEGORY_ID: import.meta.env.PUBLIC_GISCUS_CATEGORY_ID ?? "",
-  LANG: "ru",
 };
 
 export const SITE: Site = {
   TITLE: "duckpsycho",
-  DESCRIPTION: "Блог duckpsycho",
   EMAIL: "duckpsycho.developer@gmail.com",
   NUM_POSTS_ON_HOMEPAGE: 5,
   NUM_PROJECTS_ON_HOMEPAGE: 5,
-};
-
-export const HOME: Metadata = {
-  DESCRIPTION: "Главная страница сайта duckpsycho.dev",
-};
-
-export const BLOG: Metadata = {
-  TITLE: "Блог",
-  DESCRIPTION: "Блог разработчика, но не только о разработке",
-};
-
-export const PROJECTS: Metadata = {
-  TITLE: "Проекты",
-  DESCRIPTION:
-    "Проекты duckpsycho",
-};
-
-export const TAGS: Metadata = {
-  TITLE: "Теги",
-  DESCRIPTION: "Список используемых тегов",
 };
 
 export const SOCIALS: Socials = [

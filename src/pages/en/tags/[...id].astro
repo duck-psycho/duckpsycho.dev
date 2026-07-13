@@ -1,0 +1,21 @@
+---
+import TagPage from "@components/pages/TagPage.astro";
+import { getLocalizedEntries } from "@lib/content";
+
+export async function getStaticPaths() {
+  const entries = await getLocalizedEntries("en");
+  const tags = [...new Set(entries.flatMap((entry) => entry.data.tags || []))];
+
+  return tags.map((tag) => ({
+    params: { id: tag },
+    props: {
+      tag,
+      entries: entries.filter((entry) => entry.data.tags?.includes(tag)),
+    },
+  }));
+}
+
+const { tag, entries } = Astro.props;
+---
+
+<TagPage lang="en" tag={tag} entries={entries} />

@@ -1,0 +1,109 @@
+---
+import { GISCUS } from "@consts";
+
+const isConfigured = Boolean(GISCUS.REPO_ID && GISCUS.CATEGORY_ID);
+---
+
+{
+  isConfigured && (
+    <script
+      is:inline
+      define:vars={{
+        repo: GISCUS.REPO,
+        repoId: GISCUS.REPO_ID,
+        category: GISCUS.CATEGORY,
+        categoryId: GISCUS.CATEGORY_ID,
+      }}
+    >
+      let mountedKey = "";
+
+      function getGiscusTheme() {
+        try {
+          const userTheme = localStorage.getItem("theme");
+          if (userTheme === "dark") return "dark";
+          if (userTheme === "light") return "light";
+          return window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        } catch {
+          return document.documentElement.classList.contains("dark")
+            ? "dark"
+            : "light";
+        }
+      }
+
+      function getGiscusConfig() {
+        const container = document.getElementById("giscus-container");
+        if (!container) return null;
+
+        return {
+          lang: container.dataset.lang ?? "ru",
+          term: container.dataset.term ?? "",
+          theme: getGiscusTheme(),
+        };
+      }
+
+      function configKey(config) {
+        return `${config.lang}|${config.term}|${config.theme}`;
+      }
+
+      function mountGiscus(config) {
+        const container = document.getElementById("giscus-container");
+        if (!container) return false;
+
+        container.replaceChildren();
+        document
+          .querySelectorAll('script[src*="giscus.app/client.js"]')
+          .forEach((script) => script.remove());
+
+        const script = document.createElement("script");
+        script.src = "https://giscus.app/client.js";
+        script.setAttribute("data-repo", repo);
+        script.setAttribute("data-repo-id", repoId);
+        script.setAttribute("data-category", category);
+        script.setAttribute("data-category-id", categoryId);
+        script.setAttribute("data-mapping", "specific");
+        script.setAttribute("data-term", config.term);
+        script.setAttribute("data-strict", "0");
+        script.setAttribute("data-reactions-enabled", "1");
+        script.setAttribute("data-emit-metadata", "0");
+        script.setAttribute("data-input-position", "top");
+        script.setAttribute("data-theme", config.theme);
+        script.setAttribute("data-lang", config.lang);
+        script.crossOrigin = "anonymous";
+        script.async = true;
+        container.insertAdjacentElement("afterend", script);
+
+        return true;
+      }
+
+      function syncGiscus() {
+        const config = getGiscusConfig();
+        if (!config) {
+          mountedKey = "";
+          return;
+        }
+
+        const key = configKey(config);
+        if (key === mountedKey) return;
+
+        if (mountGiscus(config)) {
+          mountedKey = key;
+        }
+      }
+
+      if (!window.__giscusBound) {
+        window.__giscusBound = true;
+
+        document.addEventListener("astro:after-swap", syncGiscus);
+
+        new MutationObserver(syncGiscus).observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ["class"],
+        });
+
+        syncGiscus();
+      }
+    </script>
+  )
+}

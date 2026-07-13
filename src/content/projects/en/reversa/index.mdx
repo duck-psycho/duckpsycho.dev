@@ -1,0 +1,32 @@
+---
+title: "Reversa"
+description: "Android app for memory training"
+date: "05/14/2026"
+tags: ["Android"]
+---
+
+import Link from "@components/Link.astro";
+
+Google Play: <Link href="https://play.google.com/store/apps/details?id=com.duckpsycho.reversa" external>{"https://play.google.com/store/apps/details?id=com.duckpsycho.reversa"}</Link>
+
+A small app for short-term memory training with built-in progress tracking. 
+The concept is simple: instead of just memorizing numbers, you have to mentally reverse the digit order and enter the answer.
+
+I originally built it for myself while learning Android development, but eventually, I wanted to go through the entire journey:
+from registering a Google Play Console account to testing and final publishing.
+
+I'll probably write a post later about publishing my first app on Google Play — covering privacy policy generation,store page setup, and most importantly,
+the 14-day testing phase with 20 testers (yes, those are the current Google Play requirements, though they don't apply to everyone).
+
+## Screenshots
+
+import ImageCarousel from "@components/ImageCarousel.astro";
+
+<ImageCarousel
+  images={[
+    { src: "/images/reversa/screenshot1.webp", alt: "Reversa: main screen and rules" },
+    { src: "/images/reversa/screenshot2.webp", alt: "Reversa: number input process" },
+    { src: "/images/reversa/screenshot3.webp", alt: "Reversa: calendar with results and records" },
+    { src: "/images/reversa/screenshot4.webp", alt: "Reversa: analytics" },
+  ]}
+/>

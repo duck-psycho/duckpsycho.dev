@@ -1,0 +1,116 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/Container.astro";
+import { SITE, SOCIALS } from "@consts";
+import ArrowCard from "@components/ArrowCard.astro";
+import Link from "@components/Link.astro";
+import { getLocalizedBlog, getLocalizedProjects } from "@lib/content";
+import { type Locale } from "@lib/i18n";
+import { blogIndexUrl, projectsIndexUrl } from "@lib/utils";
+import { t } from "@i18n/ui";
+
+type Props = {
+  lang: Locale;
+};
+
+const { lang } = Astro.props;
+const ui = t(lang);
+
+const blog = (await getLocalizedBlog(lang)).slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
+const projects = (await getLocalizedProjects(lang)).slice(
+  0,
+  SITE.NUM_PROJECTS_ON_HOMEPAGE,
+);
+---
+
+<Layout lang={lang} description={ui.home.description}>
+  <Container>
+    <aside>
+      <div class="space-y-16">
+        <section class="animate space-y-6">
+          <article class="space-y-4">
+            <img
+              src="/images/logo.png"
+              alt={ui.home.logoAlt}
+              width="160"
+              height="160"
+              class="float-right ml-6 mb-4 w-32 shrink-0 rounded-full sm:w-40"
+            />
+            <span>
+              <p>{ui.home.intro}</p>
+            </span>
+            <span class="animate">
+              <p set:html={ui.home.stack} />
+            </span>
+          </article>
+        </section>
+
+        <section class="animate space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-y-2">
+            <h2 class="font-semibold text-black dark:text-white">
+              {ui.home.projects}
+            </h2>
+            <Link href={projectsIndexUrl(lang)}>{ui.home.allProjects}</Link>
+          </div>
+          <ul class="not-prose flex flex-col gap-4">
+            {
+              projects.map((project) => (
+                <li>
+                  <ArrowCard entry={project} />
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section class="animate space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-y-2">
+            <h2 class="font-semibold text-black dark:text-white">
+              {ui.home.posts}
+            </h2>
+            <Link href={blogIndexUrl(lang)}>{ui.home.allPosts}</Link>
+          </div>
+          <ul class="not-prose flex flex-col gap-4">
+            {
+              blog.map((post) => (
+                <li>
+                  <ArrowCard entry={post} />
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <section class="animate space-y-4">
+          <h2 class="font-semibold text-black dark:text-white">
+            {ui.home.socials}
+          </h2>
+          <ul class="not-prose flex flex-wrap gap-2">
+            {
+              SOCIALS.map((SOCIAL) => (
+                <li class="flex gap-x-2 text-nowrap">
+                  <Link
+                    href={SOCIAL.HREF}
+                    external
+                    aria-label={ui.home.socialAria(SITE.TITLE, SOCIAL.NAME)}
+                  >
+                    {SOCIAL.NAME}
+                  </Link>
+                  {"/"}
+                </li>
+              ))
+            }
+            <li class="line-clamp-1">
+              <Link
+                href={`mailto:${SITE.EMAIL}`}
+                aria-label={ui.home.emailAria(SITE.TITLE)}
+              >
+                {SITE.EMAIL}
+              </Link>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </aside>
+  </Container>
+</Layout>

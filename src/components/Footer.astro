@@ -2,6 +2,16 @@
 import Container from "@components/Container.astro";
 import Link from "@components/Link.astro";
 import { SITE } from "@consts";
+import { type Locale } from "@lib/i18n";
+import { localizePath } from "@lib/i18n";
+import { t } from "@i18n/ui";
+
+type Props = {
+  lang: Locale;
+};
+
+const { lang } = Astro.props;
+const ui = t(lang);
 ---
 
 <footer class="animate">
@@ -10,12 +20,12 @@ import { SITE } from "@consts";
       <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
         <span>&copy; {new Date().getFullYear()} • {SITE.TITLE}</span>
         <span aria-hidden="true">·</span>
-        <Link href="/rss.xml" underline={false}>RSS</Link>
+        <Link href={localizePath("/rss.xml", lang)} underline={false}>RSS</Link>
       </div>
       <div class="flex flex-wrap items-center gap-1.5">
         <button
           id="light-theme-button"
-          aria-label="Светлая тема"
+          aria-label={ui.footer.lightTheme}
           class="group flex size-9 items-center justify-center rounded-sm border border-black/15 hover:bg-black/5 focus-visible:bg-black/5 dark:border-white/20 dark:hover:bg-white/5 dark:focus-visible:bg-white/5"
         >
           <svg
@@ -43,7 +53,7 @@ import { SITE } from "@consts";
         </button>
         <button
           id="dark-theme-button"
-          aria-label="Тёмная тема"
+          aria-label={ui.footer.darkTheme}
           class="group flex size-9 items-center justify-center rounded-sm border border-black/15 hover:bg-black/5 focus-visible:bg-black/5 dark:border-white/20 dark:hover:bg-white/5 dark:focus-visible:bg-white/5"
         >
           <svg
@@ -63,7 +73,7 @@ import { SITE } from "@consts";
         </button>
         <button
           id="system-theme-button"
-          aria-label="Системная тема"
+          aria-label={ui.footer.systemTheme}
           class="group flex size-9 items-center justify-center rounded-sm border border-black/15 hover:bg-black/5 focus-visible:bg-black/5 dark:border-white/20 dark:hover:bg-white/5 dark:focus-visible:bg-white/5"
         >
           <svg

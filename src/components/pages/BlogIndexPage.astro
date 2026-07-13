@@ -1,0 +1,62 @@
+---
+import { type CollectionEntry } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/Container.astro";
+import ArrowCard from "@components/ArrowCard.astro";
+import { getLocalizedBlog } from "@lib/content";
+import { type Locale } from "@lib/i18n";
+import { t } from "@i18n/ui";
+
+type Props = {
+  lang: Locale;
+};
+
+const { lang } = Astro.props;
+const ui = t(lang);
+
+const data = await getLocalizedBlog(lang);
+
+type Acc = {
+  [year: string]: CollectionEntry<"blog">[];
+};
+
+const posts = data.reduce((acc: Acc, post) => {
+  const year = post.data.date.getFullYear().toString();
+  if (!acc[year]) {
+    acc[year] = [];
+  }
+  acc[year].push(post);
+  return acc;
+}, {});
+
+const years = Object.keys(posts).sort((a, b) => parseInt(b) - parseInt(a));
+---
+
+<Layout lang={lang} title={ui.blog.title} description={ui.blog.description}>
+  <Container>
+    <aside>
+      <div class="space-y-10">
+        <div class="space-y-4">
+          {
+            years.map((year) => (
+              <section class="animate space-y-4">
+                <div class="font-semibold text-black dark:text-white">
+                  {year}
+                </div>
+                <div>
+                  <ul class="not-prose flex flex-col gap-4">
+                    {posts[year].map((post) => (
+                      <li>
+                        <ArrowCard entry={post} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </section>
+            ))
+          }
+        </div>
+      </div>
+    </aside>
+  </Container>
+</Layout>

@@ -1,0 +1,79 @@
+---
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/Container.astro";
+import FormattedDate from "@components/FormattedDate.astro";
+import { readingTime, tagUrl } from "@lib/utils";
+import BackToPrevious from "@components/BackToPrevious.astro";
+import TableOfContents from "@components/TableOfContents.astro";
+import Comments from "@components/Comments.astro";
+import {
+  buildContentAlternates,
+  getSlugFromId,
+  giscusTerm,
+  type Locale,
+} from "@lib/i18n";
+import { t } from "@i18n/ui";
+
+type Props = {
+  lang: Locale;
+  project: CollectionEntry<"projects">;
+};
+
+const { lang, project } = Astro.props;
+const ui = t(lang);
+
+const allProjects = await getCollection("projects");
+const { Content, headings } = await render(project);
+const slug = getSlugFromId(project.id);
+const alternates = buildContentAlternates("projects", slug, allProjects);
+---
+
+<Layout
+  lang={lang}
+  title={project.data.title}
+  description={project.data.description}
+  alternates={alternates}
+>
+  <Container>
+    <div class="animate">
+      <BackToPrevious>{ui.common.back}</BackToPrevious>
+    </div>
+    <div class="animate mt-10 mb-4 space-y-1">
+      <div class="flex items-center gap-1.5">
+        <div class="font-base text-sm">
+          <FormattedDate date={project.data.date} lang={lang} />
+        </div>
+        &bull;
+        {project.body && (
+          <div class="font-base text-sm">
+            {readingTime(project.body, lang)}
+          </div>
+        )}
+      </div>
+      <h1 class="text-3xl font-semibold text-black dark:text-white">
+        {project.data.title}
+      </h1>
+      {
+        project.data.tags && project.data.tags.length > 0 ? (
+          <div class="animate flex items-center gap-2 pt-1">
+            <span class="text-sm">{ui.common.tags} </span>
+            {project.data.tags.map((tag) => (
+              <a
+                href={tagUrl(tag, lang)}
+                class="rounded-sm border border-black/15 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
+              >
+                {tag}
+              </a>
+            ))}
+          </div>
+        ) : null
+      }
+    </div>
+    {headings.length > 0 && <TableOfContents headings={headings} lang={lang} />}
+    <article class="animate">
+      <Content />
+      <Comments term={giscusTerm("projects", project.id)} lang={lang} />
+    </article>
+  </Container>
+</Layout>

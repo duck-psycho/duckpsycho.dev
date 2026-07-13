@@ -1,0 +1,42 @@
+---
+title: "NSZ Converter"
+description: "Android app for extracting NSZ files to NSP"
+date: "05/21/2026"
+tags: ["Android", "Nintendo Switch"]
+---
+
+import Link from "@components/Link.astro";
+
+GitHub: <Link href="https://github.com/duck-psycho/nsz-converter" external>{"https://github.com/duck-psycho/nsz-converter"}</Link>
+
+My first venture into the Nintendo Switch world, though without actually developing for Horizon. 
+I was exploring NSZ and testing <Link href="https://cursor.com/" external>Cursor</Link> with the Composer model. 
+The result is a fairly elegant user solution, with the app package weighing in at just 1.23 MB.
+
+NSZ Converter converts Nintendo Switch files from the compressed NSZ format to NSP without requiring `prod.keys`.
+
+The app is free and ad-free, but it remains closed-source because I want to prevent anyone from re-skinning it
+or republishing it on Google Play under their own name.
+
+Initially, the only permission required was write access to the selected directory. However, since version 1.2 introduced update checks,
+it now requires network access — but strictly to fetch data from https://github.com/duck-psycho/nsz-converter/releases.
+
+### Update: July 5, 2026
+
+GitHub: https://github.com/duck-psycho/nsz-converter/releases/tag/v1.2
+
+Version 1.2 introduces the following changes:
+1. Support for batch-converting entire folders, including nested subdirectories.
+2. The selected output path is now saved, so you don't need to grant directory permissions every time.
+3. A brand-new theme inspired by the Nintendo Switch design.
+4. Automatic update checks via GitHub Releases.
+5. The "Support the Developer" message is no longer shown on the first launch, and its frequency has been reduced to every 5th launch.
+## Screenshots
+
+import ImageCarousel from "@components/ImageCarousel.astro";
+
+<ImageCarousel
+  images={[
+    { src: "/images/nsz-converter/screenshot.jpg", alt: "NSZ Converter: main screen" },
+  ]}
+/>

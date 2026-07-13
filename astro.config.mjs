@@ -6,6 +6,12 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://duckpsycho.dev",
+  trailingSlash: "always",
+  i18n: {
+    defaultLocale: "ru",
+    locales: ["ru", "en"],
+    routing: { prefixDefaultLocale: false },
+  },
   integrations: [sitemap(), mdx(), pagefind()],
   vite: {
     plugins: [tailwindcss()],
