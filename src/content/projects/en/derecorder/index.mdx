@@ -1,0 +1,28 @@
+---
+title: "Derecorder"
+description: "An app that builds a Markdown note from audio recordings"
+date: "07/13/2026"
+tags: ["Python, AI"]
+---
+
+import Link from "@components/Link.astro";
+
+GitHub: <Link href="https://github.com/duck-psycho/derecorder" external>{"https://github.com/duck-psycho/derecorder"}</Link>
+
+Derecorder is a desktop Python app for local transcription of audio recordings into text.
+Powered by the OpenAI Whisper model, it processes files directly on the user's device, eliminating the need for cloud uploads and ensuring complete privacy.
+To get started, just drag a folder of audio recordings into the app window.
+
+Each transcript is formatted as a note, with the recording date and time inferred automatically from metadata.
+With batch processing, all files are merged into a single document,
+where text notes are grouped by day and sorted in chronological order.
+
+## Screenshots
+
+import ImageCarousel from "@components/ImageCarousel.astro";
+
+<ImageCarousel
+  images={[
+    { src: "/images/derecorder/screenshot.png", alt: "Derecorder: main screen" },
+  ]}
+/>
