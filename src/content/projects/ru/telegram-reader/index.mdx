@@ -1,0 +1,28 @@
+---
+title: "Telegram Reader"
+description: "Веб-читалка публичных Telegram-каналов в привычном интерфейсе"
+date: "07/19/2026"
+tags: ["Telegram"]
+---
+
+import Link from "@components/Link.astro";
+
+Ссылка: <Link href="https://reader.duckpsycho.dev/" external>{"https://reader.duckpsycho.dev/"}</Link>
+
+Проект, идею которого я вынашивал ещё несколько лет назад, а реализовать до конца дошли руки только сейчас. Вашему вниманию — **Telegram Reader**.
+
+Сервис позволяет читать публичные Telegram-каналы, подписываться на них и иметь доступ к каналам даже в условиях блокировки Telegram.
+При условии, что у нас не блокируется Cloudflare.
+
+При первой подписке создается анонимный аккаунт, в котором сохраняются все каналы. Сохранить `Account ID` можно в настройках,
+чтобы синхронизировать подписки между устройствами или не потерять к ним доступ.
+
+## Скриншоты
+
+import ImageCarousel from "@components/ImageCarousel.astro";
+
+<ImageCarousel
+  images={[
+    { src: "/images/telegram-reader/screenshot.png", alt: "Telegram Reader: главный экран" },
+  ]}
+/>

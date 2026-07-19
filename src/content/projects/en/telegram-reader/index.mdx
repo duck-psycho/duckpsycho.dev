@@ -1,0 +1,28 @@
+---
+title: "Telegram Reader"
+description: "A web reader for public Telegram channels in a familiar interface"
+date: "07/19/2026"
+tags: ["Telegram"]
+---
+
+import Link from "@components/Link.astro";
+
+Link: <Link href="https://reader.duckpsycho.dev/" external>{"https://reader.duckpsycho.dev/"}</Link>
+
+This is a project I had been sitting on for several years, and only now finally got around to finishing. Meet **Telegram Reader**.
+
+The service lets you read public Telegram channels, subscribe to them,
+and maintain access even if Telegram is blocked — provided that Cloudflare itself remains accessible.
+
+When you first subscribe, an anonymous account is created to store all your channels.
+You can save the `Account ID` in the settings to sync your subscriptions across devices or to avoid losing access.
+
+## Screenshots
+
+import ImageCarousel from "@components/ImageCarousel.astro";
+
+<ImageCarousel
+  images={[
+    { src: "/images/telegram-reader/screenshot.png", alt: "Telegram Reader: main screen" },
+  ]}
+/>
