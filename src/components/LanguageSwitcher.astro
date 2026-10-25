@@ -12,15 +12,53 @@ const { lang, alternates } = Astro.props;
 const ui = t(lang);
 const alternateLang: Locale = lang === "ru" ? "en" : "ru";
 const alternateLangLabel = ui.languageSwitcher[alternateLang];
+const alternate = alternates.find((page) => page.lang === alternateLang);
 const alternateHref =
-  alternates.find((alternate) => alternate.lang === alternateLang)?.href ??
+  alternate?.href ??
   localizePath(stripLocalePrefix(Astro.url.pathname), alternateLang);
 ---
 
-<a
-  href={alternateHref}
-  class="rounded-sm border border-black/15 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
-  aria-label={`${ui.languageSwitcher.label}: ${alternateLangLabel}`}
->
-  {alternateLangLabel}
-</a>
+<div class="relative shrink-0">
+  <a
+    href={alternateHref}
+    class="inline-block rounded-sm border border-black/15 px-2 py-1 text-sm transition-colors duration-300 ease-in-out hover:bg-black/5 hover:text-black focus-visible:bg-black/5 focus-visible:text-black dark:border-white/20 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:bg-white/5 dark:focus-visible:text-white"
+    aria-label={`${ui.languageSwitcher.label}: ${alternateLangLabel}`}
+  >
+    {alternateLangLabel}
+  </a>
+  {alternate && <div
+    hidden
+    data-language-notice
+    data-language={alternateLang}
+    data-pagefind-ignore
+    class="absolute right-0 top-full z-10 mt-2 w-max max-w-[calc(100vw-1.5rem)] rounded-sm border border-black/15 bg-neutral-100 px-3 py-2 text-xs shadow-sm dark:border-white/20 dark:bg-neutral-900"
+    role="status"
+  >
+    <a
+      href={alternateHref}
+      lang={alternateLang}
+      class="underline decoration-black/30 underline-offset-4 hover:text-black focus-visible:text-black dark:decoration-white/30 dark:hover:text-white dark:focus-visible:text-white"
+    >
+      {t(alternateLang).languageSwitcher.available}
+    </a>
+  </div>}
+</div>
+
+<script>
+  function updateLanguageNotices() {
+    const browserLanguage =
+      navigator.languages?.[0] || navigator.language || "";
+    const preferredLanguage =
+      browserLanguage.toLowerCase().split("-")[0] === "ru" ? "ru" : "en";
+
+    document
+      .querySelectorAll<HTMLElement>("[data-language-notice]")
+      .forEach((notice) => {
+        notice.hidden = notice.dataset.language !== preferredLanguage;
+      });
+  }
+
+  updateLanguageNotices();
+  document.addEventListener("astro:page-load", updateLanguageNotices);
+  window.addEventListener("languagechange", updateLanguageNotices);
+</script>

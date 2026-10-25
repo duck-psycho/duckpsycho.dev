@@ -64,6 +64,7 @@ export const UI = {
     },
     languageSwitcher: {
       label: "Язык",
+      available: "Доступно на русском",
       ru: "RU",
       en: "EN",
     },
@@ -131,6 +132,7 @@ export const UI = {
     },
     languageSwitcher: {
       label: "Language",
+      available: "Available in English",
       ru: "RU",
       en: "EN",
     },
