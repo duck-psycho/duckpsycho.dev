@@ -1,5 +1,4 @@
 ---
-import Search from "astro-pagefind/components/Search";
 import { type Locale } from "@lib/i18n";
 import { t } from "@i18n/ui";
 
@@ -20,15 +19,7 @@ const ui = t(lang);
       id="pagefind-container"
       class="m-0 flex h-fit max-h-[80%] w-full max-w-(--breakpoint-sm) flex-col overflow-auto rounded-sm border border-black/15 bg-neutral-100 p-2 px-4 py-3 shadow-lg dark:border-white/20 dark:bg-neutral-900"
     >
-      <Search
-        id="search"
-        className="pagefind-ui"
-        uiOptions={{
-          showImages: false,
-          excerptLength: 15,
-          resetStyles: false,
-        }}
-      />
+      <div id="search" class="pagefind-ui"></div>
       <div class="mr-2 pb-1 pt-4 text-right text-xs dark:prose-invert">
         {ui.search.closePrefix}{" "}
         <span class="prose text-xs dark:prose-invert"><kbd class="">Esc</kbd></span>
@@ -37,6 +28,31 @@ const ui = t(lang);
     </div>
   </div>
 </aside>
+
+<script>
+  let pagefindUI: PagefindUI | undefined;
+
+  function initPagefindSearch() {
+    const search = document.getElementById("search");
+    if (!search || search.dataset.initialized === "true") return;
+
+    pagefindUI = new window.PagefindUI({
+      element: search,
+      bundlePath: `${import.meta.env.BASE_URL}pagefind/`,
+      showImages: false,
+      excerptLength: 15,
+      resetStyles: false,
+    });
+    search.dataset.initialized = "true";
+  }
+
+  document.addEventListener("astro:before-swap", () => {
+    pagefindUI?.destroy();
+    pagefindUI = undefined;
+  });
+  document.addEventListener("astro:page-load", initPagefindSearch);
+  initPagefindSearch();
+</script>
 
 <script is:inline>
   function openPagefind() {
