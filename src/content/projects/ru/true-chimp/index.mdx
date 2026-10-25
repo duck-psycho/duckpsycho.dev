@@ -1,0 +1,29 @@
+---
+title: "True Chimp Test"
+description: "Браузерная игра для тренировки кратковременной зрительной памяти"
+date: "10/25/2026"
+tags: ["Web"]
+---
+
+import Link from "@components/Link.astro";
+
+Ссылка: <Link href="https://truechimp.duckpsycho.dev/" external>{"https://truechimp.duckpsycho.dev/"}</Link>
+
+Решил немного переосмыслить Chimp Test от <Link href="https://humanbenchmark.com/tests/chimp" external>Human Benchmark</Link>.
+
+Это классический Chimp Test, но с возможностью ограничивать время на запоминание чисел.
+Есть сохранение результатов и личных рекордов без необходимости регистрации (аккаунт создаётся автоматически).
+
+Мне вообще нравится идея создавать аккаунт автоматически на базе UUID. Никакого логина и пароля,
+нужно только сохранить UUID, и всё. Ни здесь, ни в <Link href="https://reader.duckpsycho.dev/" external>Telegram Reader</Link>
+нет чувствительных данных, поэтому решение идеальное.
+
+## Скриншоты
+
+import ImageCarousel from "@components/ImageCarousel.astro";
+
+<ImageCarousel
+  images={[
+    { src: "/images/true-chimp/screenshot.png", alt: "True Chimp Test: скриншот страницы" },
+  ]}
+/>

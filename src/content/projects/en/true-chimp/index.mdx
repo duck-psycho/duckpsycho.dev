@@ -1,0 +1,29 @@
+---
+title: "True Chimp Test"
+description: "A browser game for training short-term visual memory"
+date: "10/25/2026"
+tags: ["Web"]
+---
+
+import Link from "@components/Link.astro";
+
+Link: <Link href="https://truechimp.duckpsycho.dev/" external>{"https://truechimp.duckpsycho.dev/"}</Link>
+
+I decided to put my own spin on the Chimp Test from <Link href="https://humanbenchmark.com/tests/chimp" external>Human Benchmark</Link>.
+
+It's the classic Chimp Test, with the option to set a time limit for memorizing the numbers.
+Results and personal bests are saved without requiring registration (an account is created automatically).
+
+I really like the idea of automatically creating UUID-based accounts. No username or password,
+just save your UUID and you're all set. Neither this project nor <Link href="https://reader.duckpsycho.dev/" external>Telegram Reader</Link>
+stores sensitive data, so this approach is a perfect fit.
+
+## Screenshots
+
+import ImageCarousel from "@components/ImageCarousel.astro";
+
+<ImageCarousel
+  images={[
+    { src: "/images/true-chimp/screenshot.png", alt: "True Chimp Test: page screenshot" },
+  ]}
+/>
